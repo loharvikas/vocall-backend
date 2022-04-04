@@ -31,6 +31,7 @@ class WorkspaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workspace
         fields = '__all__'
+        # depth = 1
 
 
 class VoiceSerializer(serializers.ModelSerializer):

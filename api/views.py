@@ -17,10 +17,16 @@ class UserAPIView(generics.ListCreateAPIView):
 
 
 class WorkspaceAPIView(generics.ListCreateAPIView):
-    serializer_class = serializers.UserSerializer
+    serializer_class = serializers.WorkspaceSerializer
     queryset = Workspace.objects.all()
 
 
 class VoiceAPIView(generics.ListCreateAPIView):
     serializer_class = serializers.VoiceSerializer
     queryset = Voice.objects.all()
+
+
+class VoiceDetailAPIView(generics.RetrieveAPIView):
+    serializer_class = serializers.VoiceSerializer
+    queryset = Voice.objects.all()
+    lookup_field = 'uuid'
