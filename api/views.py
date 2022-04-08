@@ -1,9 +1,10 @@
 from operator import ge
 from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.permissions import AllowAny
 from . import serializers
 from django.contrib.auth import get_user_model
-from workspace.models import Workspace
 from voice.models import Voice
 
 
@@ -16,14 +17,19 @@ class UserAPIView(generics.ListCreateAPIView):
     queryset = User.objects.all()
 
 
-class WorkspaceAPIView(generics.ListCreateAPIView):
-    serializer_class = serializers.WorkspaceSerializer
-    queryset = Workspace.objects.all()
-
-
 class VoiceAPIView(generics.ListCreateAPIView):
+    premission_clasees = (AllowAny, )
     serializer_class = serializers.VoiceSerializer
     queryset = Voice.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        print(request.data, request.FILES)
+        serializer = serializers.VoiceSerializer(
+            data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class VoiceDetailAPIView(generics.RetrieveAPIView):

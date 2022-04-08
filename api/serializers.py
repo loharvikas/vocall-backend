@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
-from workspace.models import Workspace
 from voice.models import Voice
 
 User = get_user_model()
@@ -24,14 +23,6 @@ class UserSerializer(serializers.ModelSerializer):
             'date_joined',
             'last_modified_date'
         ]
-
-
-class WorkspaceSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Workspace
-        fields = '__all__'
-        # depth = 1
 
 
 class VoiceSerializer(serializers.ModelSerializer):
