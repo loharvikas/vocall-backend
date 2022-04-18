@@ -43,12 +43,15 @@ class LoginAPIView(TokenObtainPairView):
 
 
 class VoiceAPIView(generics.ListCreateAPIView):
-    premission_clasees = (AllowAny, )
     serializer_class = serializers.VoiceSerializer
     queryset = Voice.objects.all()
 
+    def get(self, request, *args, **kwargs):
+        qs = Voice.objects.all().filter(user=request.user).order_by('-created_date')
+        serializer = serializers.VoiceSerializer(qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def post(self, request, *args, **kwargs):
-        print(request.data, request.FILES)
         serializer = serializers.VoiceSerializer(
             data=request.data)
         if serializer.is_valid():
@@ -57,30 +60,29 @@ class VoiceAPIView(generics.ListCreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class VoiceDetailAPIView(generics.RetrieveAPIView):
+class VoiceDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.VoiceSerializer
     queryset = Voice.objects.all()
     lookup_field = 'uuid'
 
 
-# class RegisterAPIView(generics.CreateAPIView):
-#     perminssion_classes = (AllowAny)
-#     authentication_classes = []
-#     serializer_class = serializers.UserSerializer
+class PasswordChangeAPIView(APIView):
+    serializer_class = serializers.PasswordChangeSerializer
+    model = User
 
-    # def post(self, request, *arg, **kwargs):
-    #     serializer = serializers.RegisterSerializer(
-    #         data=request.data
-    #     )
-    #     if serializer.is_valid():
-    #         user = serializer.save()
-    #         refresh = RefreshToken.for_user(user)
-    #         res = {
-    #             "refresh": str(refresh),
-    #             "access": str(refresh.access_token),
-    #         }
-    #         return Response({
-    #             "user": serializer.data,
-    #             "access": res["access"],
-    #             "refresh": refresh["refresh"]
-    #         }, status=status.HTTP_201_CREATED)
+    def update(self, request, *args, **kwargs):
+        user = request.user
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            if user.check_password(serializer.data.get('old_password')):
+                user.set_password(serializer.data.get('new_password'))
+                user.save()
+                return Response(
+                    "Password updated successfully",
+                    status.HTTP_200_OK
+                )
+            return Response(
+                "Password wrong",
+                status.HTTP_400_BAD_REQUEST
+            )
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

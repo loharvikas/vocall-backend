@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
@@ -60,12 +59,8 @@ class VoiceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# class RegisterSerializer(UserSerializer):
-# #     full_name = serializers.CharField(max_length=255, required=True)
-# #     email = serializers.EmailField(max_length=255, required=True, validators=[
-# #    )
-# #     password = serializers.CharField(max_length=255, required=True, write_only=True)
-
-#     class Meta:
-#         model = User
-#         fields =
+class PasswordChangeSerializer(serializers.Serializer):
+    old_password = serializers.CharField(
+        max_length='255', write_only=True, required=True)
+    new_password = serializers.CharField(
+        max_length='255', write_only=True, required=True)
