@@ -61,6 +61,6 @@ class VoiceSerializer(serializers.ModelSerializer):
 
 class PasswordChangeSerializer(serializers.Serializer):
     old_password = serializers.CharField(
-        max_length='255', write_only=True, required=True)
+        required=True)
     new_password = serializers.CharField(
-        max_length='255', write_only=True, required=True)
+        required=True)

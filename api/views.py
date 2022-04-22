@@ -66,14 +66,16 @@ class VoiceDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'uuid'
 
 
-class PasswordChangeAPIView(APIView):
+class PasswordChangeAPIView(generics.UpdateAPIView):
     serializer_class = serializers.PasswordChangeSerializer
     model = User
 
     def update(self, request, *args, **kwargs):
         user = request.user
-        serializer = self.get_serializer(data=request.data)
+        print('YES', request.data)
+        serializer = serializers.PasswordChangeSerializer(data=request.data)
         if serializer.is_valid():
+            print('IN')
             if user.check_password(serializer.data.get('old_password')):
                 user.set_password(serializer.data.get('new_password'))
                 user.save()
