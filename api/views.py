@@ -65,6 +65,12 @@ class VoiceDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Voice.objects.all()
     lookup_field = 'uuid'
 
+    def get(self, request, uuid, *args, **kwargs):
+        print("UUID:", uuid)
+        qs = Voice.objects.get(uuid=uuid)
+        serializer = self.get_serializer_class(qs=qs)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class PasswordChangeAPIView(generics.UpdateAPIView):
     serializer_class = serializers.PasswordChangeSerializer

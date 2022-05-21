@@ -28,13 +28,6 @@ class UserSerializer(serializers.ModelSerializer):
             'last_modified_date'
         ]
 
-    def create(self, validated_data):
-        try:
-            user = User.objects.get(email=validated_data["email"])
-        except ObjectDoesNotExist:
-            user = User.objects.create_user(**validated_data)
-        return user
-
 
 class LoginSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):

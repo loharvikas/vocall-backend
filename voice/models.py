@@ -11,7 +11,7 @@ class Voice(models.Model):
     uuid = models.UUIDField(
         default=uuid.uuid4, editable=False, primary_key=True)
     name = models.CharField(max_length=255, null=True, blank=True)
-    file = models.FileField(upload_to="records")
+    file = models.FileField(upload_to="records", null=True, blank=True)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="voices")
     active = models.BooleanField(default=True)
