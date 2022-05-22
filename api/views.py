@@ -60,16 +60,30 @@ class VoiceAPIView(generics.ListCreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class VoiceDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+class VoiceDetailAPIView(APIView):
     serializer_class = serializers.VoiceSerializer
     queryset = Voice.objects.all()
     lookup_field = 'uuid'
+    permission_classes = (AllowAny, )
+    authentication_classes = []
 
     def get(self, request, uuid, *args, **kwargs):
         print("UUID:", uuid)
         qs = Voice.objects.get(uuid=uuid)
-        serializer = self.get_serializer_class(qs=qs)
+        serializer = serializers.VoiceSerializer(qs)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class VoiceUpdateAPIView(generics.UpdateAPIView):
+    serializer_class = serializers.VoiceSerializer
+    queryset = Voice.objects.all()
+    lookup_field = 'uuid'
+
+
+class VoiceDeleteAPIView(generics.DestroyAPIView):
+    serializer_class = serializers.VoiceSerializer
+    queryset = Voice.objects.all()
+    lookup_field = 'uuid'
 
 
 class PasswordChangeAPIView(generics.UpdateAPIView):
@@ -81,7 +95,6 @@ class PasswordChangeAPIView(generics.UpdateAPIView):
         print('YES', request.data)
         serializer = serializers.PasswordChangeSerializer(data=request.data)
         if serializer.is_valid():
-            print('IN')
             if user.check_password(serializer.data.get('old_password')):
                 user.set_password(serializer.data.get('new_password'))
                 user.save()
