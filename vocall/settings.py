@@ -12,19 +12,23 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 import os
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env()
+# reading .env file
+environ.Env.read_env()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ts10*x)dl$@vh$4wh5)2chx7o+kc+!)cj#v++axa0wapcb)$ac'
+SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = []
 
@@ -88,11 +92,11 @@ WSGI_APPLICATION = 'vocall.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'vocalldb',
-        'USER': 'vikas',
-        'PASSWORD': '##Vikas149687',
-        'HOST': 'localhost',
-        'PORT': 5432
+        'NAME': env("DB_NAME"),
+        'USER': env("DB_USER"),
+        'PASSWORD': env("DB_PASSWORD"),
+        'HOST': env("DB_HOST"),
+        'PORT': env("DB_PORT"),
     }
 }
 
@@ -179,8 +183,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-AWS_ACCESS_KEY_ID = "AKIASDE2HWTF6XL4RE2V"
-AWS_SECRET_ACCESS_KEY = "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"
+AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY")
+AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_KEY")
 AWS_STORAGE_BUCKET_NAME = "vocall-s3-bucket"
 AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 AWS_S3_OBJECT_PARAMETERS = {
