@@ -30,7 +30,7 @@ SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['www.vobackend.xyz', 'vobackend.xyz', '43.204.128.179']
 
 
 # Application definition
@@ -217,6 +217,10 @@ CORS_ALLOW_ALL_ORIGINS: False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://www.vobackend.xyz",
+    "https://vocall.vercel.app",
+    "https://www.vocall.vercel.app",
+    "https://vobackend.xyz",
     "http://127.0.0.1:3000",
 ]
 SESSION_COOKIE_SECURE = True
