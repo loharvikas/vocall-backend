@@ -212,9 +212,15 @@ AUTH_USER_MODEL = 'user.User'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
+# SECURITY CONFIGURATIONS
+CORS_ALLOW_ALL_ORIGINS: False
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    "http://127.0.0.1:3000"
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+# CSRF_TRUSTED_ORIGINS = ['https://api.dropform.co', 'https://dropform.co']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
